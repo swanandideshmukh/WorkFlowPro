@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Columns3, ListTodo, Calendar, CheckCircle2,
-  Bell, Settings, Shield, User,
+  Bell, Settings, Shield, User, Search,
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
@@ -17,6 +17,7 @@ const allLinks = [
   { title: 'Tasks', url: '/tasks', icon: ListTodo, roles: ['admin', 'manager', 'employee'] },
   { title: 'Calendar', url: '/calendar', icon: Calendar, roles: ['admin', 'manager', 'employee'] },
   { title: 'Daily Tasks', url: '/daily-tasks', icon: CheckCircle2, roles: ['admin', 'manager', 'employee'] },
+  { title: 'Search', url: '/search', icon: Search, roles: ['admin', 'manager', 'employee'] },
   { title: 'Notifications', url: '/notifications', icon: Bell, roles: ['admin', 'manager', 'employee'] },
   { title: 'Profile', url: '/profile', icon: User, roles: ['admin', 'manager', 'employee'] },
   { title: 'Settings', url: '/settings', icon: Settings, roles: ['admin', 'manager'] },
