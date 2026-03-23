@@ -1,3 +1,3 @@
-# Welcome to your Lovable project
+WorkFlowPro
 
-TODO: Document your project here
+Internal Task Manager
