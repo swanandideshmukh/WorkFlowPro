@@ -36,31 +36,29 @@ export default function Admin() {
   const [newRole, setNewRole] = useState<AppRole>('employee');
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    if (currentRole !== 'admin') return;
+    const fetchData = async () => {
+      const [profilesRes, rolesRes, projectsRes, tasksRes] = await Promise.all([
+        supabase.from('profiles').select('id, full_name, email'),
+        supabase.from('user_roles').select('user_id, role'),
+        supabase.from('projects').select('id, name, description'),
+        supabase.from('tasks').select('id, status, project_id'),
+      ]);
+      const profiles = profilesRes.data || [];
+      const roles = rolesRes.data || [];
+      setUsers(profiles.map(p => ({
+        ...p,
+        role: (roles.find(r => r.user_id === p.id)?.role || 'employee') as AppRole,
+      })));
+      if (projectsRes.data) setProjects(projectsRes.data);
+      if (tasksRes.data) setTasks(tasksRes.data);
+      setLoading(false);
+    };
+    fetchData();
+  }, [currentRole]);
+
   if (currentRole !== 'admin') return <Navigate to="/dashboard" replace />;
-
-  const fetchData = async () => {
-    const [profilesRes, rolesRes, projectsRes, tasksRes] = await Promise.all([
-      supabase.from('profiles').select('id, full_name, email'),
-      supabase.from('user_roles').select('user_id, role'),
-      supabase.from('projects').select('id, name, description'),
-      supabase.from('tasks').select('id, status, project_id'),
-    ]);
-
-    const profiles = profilesRes.data || [];
-    const roles = rolesRes.data || [];
-
-    const merged = profiles.map(p => ({
-      ...p,
-      role: (roles.find(r => r.user_id === p.id)?.role || 'employee') as AppRole,
-    }));
-
-    setUsers(merged);
-    if (projectsRes.data) setProjects(projectsRes.data);
-    if (tasksRes.data) setTasks(tasksRes.data);
-    setLoading(false);
-  };
-
-  useEffect(() => { fetchData(); }, []);
 
   const handleRoleUpdate = async () => {
     if (!editUser) return;
@@ -68,30 +66,30 @@ export default function Admin() {
     await supabase.from('user_roles').update({ role: newRole }).eq('user_id', editUser.id);
     setSaving(false);
     setEditUser(null);
-    fetchData();
+    // refetch
+    const [profilesRes, rolesRes] = await Promise.all([
+      supabase.from('profiles').select('id, full_name, email'),
+      supabase.from('user_roles').select('user_id, role'),
+    ]);
+    const profiles = profilesRes.data || [];
+    const roles = rolesRes.data || [];
+    setUsers(profiles.map(p => ({
+      ...p,
+      role: (roles.find(r => r.user_id === p.id)?.role || 'employee') as AppRole,
+    })));
   };
 
   const handleDeleteProject = async (id: string) => {
     await supabase.from('projects').delete().eq('id', id);
-    fetchData();
+    const { data } = await supabase.from('projects').select('id, name, description');
+    if (data) setProjects(data);
   };
 
-  // Chart data
   const barData = {
     labels: projects.map(p => p.name),
     datasets: [
-      {
-        label: 'Completed',
-        data: projects.map(p => tasks.filter(t => t.project_id === p.id && t.status === 'completed').length),
-        backgroundColor: 'hsl(160, 84%, 39%)',
-        borderRadius: 4,
-      },
-      {
-        label: 'Remaining',
-        data: projects.map(p => tasks.filter(t => t.project_id === p.id && t.status !== 'completed').length),
-        backgroundColor: 'hsl(215, 16%, 47%)',
-        borderRadius: 4,
-      },
+      { label: 'Completed', data: projects.map(p => tasks.filter(t => t.project_id === p.id && t.status === 'completed').length), backgroundColor: 'hsl(160, 84%, 39%)', borderRadius: 4 },
+      { label: 'Remaining', data: projects.map(p => tasks.filter(t => t.project_id === p.id && t.status !== 'completed').length), backgroundColor: 'hsl(215, 16%, 47%)', borderRadius: 4 },
     ],
   };
 
@@ -104,14 +102,12 @@ export default function Admin() {
         <h1 className="text-2xl font-bold" style={{ fontFamily: 'Inter' }}>Admin Panel</h1>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard title="Total Users" value={users.length} icon={Users} iconColor="text-primary" iconBg="bg-blue-100" />
         <StatCard title="Projects" value={projects.length} icon={FolderOpen} iconColor="text-emerald-600" iconBg="bg-emerald-100" />
         <StatCard title="Total Tasks" value={tasks.length} icon={ListTodo} iconColor="text-yellow-600" iconBg="bg-yellow-100" />
       </div>
 
-      {/* User Management */}
       <Card className="shadow-sm">
         <CardHeader><CardTitle className="text-base">User Management</CardTitle></CardHeader>
         <CardContent>
@@ -130,9 +126,7 @@ export default function Admin() {
                   <tr key={u.id} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
                     <td className="py-3 font-medium">{u.full_name}</td>
                     <td className="py-3 text-muted-foreground">{u.email}</td>
-                    <td className="py-3">
-                      <Badge variant="secondary" className="text-xs capitalize">{u.role}</Badge>
-                    </td>
+                    <td className="py-3"><Badge variant="secondary" className="text-xs capitalize">{u.role}</Badge></td>
                     <td className="py-3 text-right">
                       <Button variant="ghost" size="sm" onClick={() => { setEditUser(u); setNewRole(u.role); }}>
                         <Pencil className="h-3.5 w-3.5" />
@@ -146,7 +140,6 @@ export default function Admin() {
         </CardContent>
       </Card>
 
-      {/* Projects */}
       <Card className="shadow-sm">
         <CardHeader><CardTitle className="text-base">Projects</CardTitle></CardHeader>
         <CardContent>
@@ -179,26 +172,17 @@ export default function Admin() {
         </CardContent>
       </Card>
 
-      {/* Analytics */}
       <Card className="shadow-sm">
         <CardHeader><CardTitle className="text-base">Task Completion by Project</CardTitle></CardHeader>
         <CardContent>
           {projects.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-8">No projects to display</p>
           ) : (
-            <Bar
-              data={barData}
-              options={{
-                responsive: true,
-                plugins: { legend: { position: 'bottom' } },
-                scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } },
-              }}
-            />
+            <Bar data={barData} options={{ responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } } }} />
           )}
         </CardContent>
       </Card>
 
-      {/* Edit role dialog */}
       <Dialog open={!!editUser} onOpenChange={(open) => !open && setEditUser(null)}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader><DialogTitle>Edit Role — {editUser?.full_name}</DialogTitle></DialogHeader>

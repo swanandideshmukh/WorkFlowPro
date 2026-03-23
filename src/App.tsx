@@ -9,6 +9,14 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Kanban from "./pages/Kanban";
+import Tasks from "./pages/Tasks";
+import CalendarPage from "./pages/CalendarPage";
+import DailyTasks from "./pages/DailyTasks";
+import Notifications from "./pages/Notifications";
+import Profile from "./pages/Profile";
+import Search from "./pages/Search";
+import Admin from "./pages/Admin";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,13 +35,14 @@ const App = () => (
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/kanban" element={<Kanban />} />
-              <Route path="/tasks" element={<Dashboard />} />
-              <Route path="/calendar" element={<Dashboard />} />
-              <Route path="/daily-tasks" element={<Dashboard />} />
-              <Route path="/notifications" element={<Dashboard />} />
-              <Route path="/profile" element={<Dashboard />} />
-              <Route path="/settings" element={<Dashboard />} />
-              <Route path="/admin" element={<Dashboard />} />
+              <Route path="/tasks" element={<Tasks />} />
+              <Route path="/calendar" element={<CalendarPage />} />
+              <Route path="/daily-tasks" element={<DailyTasks />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
