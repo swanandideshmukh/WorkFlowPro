@@ -58,32 +58,18 @@ src/
 └── App.jsx
 ```
 
-## Getting Started
-```bash
-# Clone the repository
-git clone https://github.com/swanandideshmukh/WorkFlowPro.git
 
-# Navigate into the project
-cd WorkFlowPro
-
-# Install dependencies
-npm install
-
-# Add environment variables
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-# Start development server
-npm run dev
-```
 
 ## Screenshots
+
 
 > Login page
 <img width="1334" height="685" alt="Screenshot 2026-03-25 163729" src="https://github.com/user-attachments/assets/4ceffe8b-c4f1-448d-a533-4ab64c9f0525" />
 
+
 > Dashboard
 <img width="1339" height="681" alt="Screenshot 2026-03-25 163826" src="https://github.com/user-attachments/assets/e8a189ca-ecfb-4b08-ba93-514092db0bfe" />
+
 
 > Kanban Board
 ><img width="1335" height="670" alt="Screenshot 2026-03-25 163927" src="https://github.com/user-attachments/assets/37edf234-09e4-42d0-a0b6-6bf185f4d3c7" />
