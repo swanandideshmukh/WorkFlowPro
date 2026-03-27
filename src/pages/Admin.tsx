@@ -15,7 +15,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, T
 import { Bar } from 'react-chartjs-2';
 import type { Database } from '@/integrations/supabase/types';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend); //register chart
 
 type AppRole = Database['public']['Enums']['app_role'];
 
