@@ -5,7 +5,12 @@ A web-based internal task and workflow management system built as a simplified a
 
 > Simplified alternative to Jira and Asana built for small to medium organizations.
 
+## Motivation
 
+Most workflow tools are either too complex or too expensive for small teams.
+WorkFlowPro was built to explore how role-based access, real-time data sync,
+and a Kanban interface can be implemented with a modern React + Supabase stack,
+keeping the architecture simple and the bundle lean.
 
 | Role | Email | Password |
 |------|-------|----------|
