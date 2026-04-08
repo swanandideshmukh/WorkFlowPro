@@ -1,3 +1,8 @@
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase)
+![Netlify](https://img.shields.io/badge/Deployed-Netlify-00C7B7?logo=netlify)
+
 # WorkFlowPro
 
 A web-based internal task and workflow management system built as a simplified alternative to Jira and Asana. Helps teams assign tasks, track project progress, schedule meetings, and collaborate efficiently through one centralized platform.
