@@ -23,12 +23,22 @@ export default function DailyTasks() {
 
   const fetchTasks = async () => {
     if (!user) return;
-    const { data } = await supabase
-      .from('tasks')
-      .select('*, projects(name)')
-      .eq('assigned_to', user.id)
-      .order('deadline', { ascending: true });
-    if (data) setTasks(data as unknown as Task[]);
+    try {
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('*, projects(name)')
+        .eq('assigned_to', user.id)
+        .order('deadline', { ascending: true });
+      if (error) {
+        console.warn('Join query failed, falling back:', error.message);
+        const { data: fallback } = await supabase.from('tasks').select('*').eq('assigned_to', user.id).order('deadline', { ascending: true });
+        if (fallback) setTasks(fallback as unknown as Task[]);
+      } else if (data) {
+        setTasks(data as unknown as Task[]);
+      }
+    } catch (err) {
+      console.error('Failed to fetch daily tasks:', err);
+    }
     setLoading(false);
   };
 
