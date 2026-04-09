@@ -30,12 +30,22 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
-    const [tasksRes, projectsRes] = await Promise.all([
-      supabase.from('tasks').select('*, projects(name)'),
-      supabase.from('projects').select('id, name'),
-    ]);
-    if (tasksRes.data) setTasks(tasksRes.data as unknown as TaskRow[]);
-    if (projectsRes.data) setProjects(projectsRes.data);
+    try {
+      const [tasksRes, projectsRes] = await Promise.all([
+        supabase.from('tasks').select('*, projects(name)'),
+        supabase.from('projects').select('id, name'),
+      ]);
+      if (tasksRes.error) {
+        console.warn('Tasks join failed, falling back:', tasksRes.error.message);
+        const { data } = await supabase.from('tasks').select('*');
+        if (data) setTasks(data as unknown as TaskRow[]);
+      } else if (tasksRes.data) {
+        setTasks(tasksRes.data as unknown as TaskRow[]);
+      }
+      if (projectsRes.data) setProjects(projectsRes.data);
+    } catch (err) {
+      console.error('Failed to fetch dashboard data:', err);
+    }
     setLoading(false);
   };
 

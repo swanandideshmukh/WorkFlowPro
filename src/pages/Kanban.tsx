@@ -34,11 +34,22 @@ export default function Kanban() {
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
   const fetchTasks = async () => {
-    const { data } = await supabase
-      .from('tasks')
-      .select('*, profiles:assigned_to(full_name), projects(name)')
-      .order('created_at', { ascending: false });
-    if (data) setTasks(data as unknown as Task[]);
+    try {
+      // Try with joins first
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('*, profiles:assigned_to(full_name), projects(name)')
+        .order('created_at', { ascending: false });
+      if (error) {
+        console.warn('Join query failed, falling back to simple query:', error.message);
+        const { data: fallback } = await supabase.from('tasks').select('*').order('created_at', { ascending: false });
+        if (fallback) setTasks(fallback as unknown as Task[]);
+      } else if (data) {
+        setTasks(data as unknown as Task[]);
+      }
+    } catch (err) {
+      console.error('Failed to fetch tasks:', err);
+    }
     setLoading(false);
   };
 

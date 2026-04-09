@@ -54,12 +54,22 @@ export function TaskDetailPanel({ taskId, onClose }: Props) {
         }
       }
 
-      const { data: c } = await supabase
-        .from('comments')
-        .select('id, content, created_at, author:author_id(full_name)')
-        .eq('task_id', taskId)
-        .order('created_at', { ascending: true });
-      if (c) setComments(c as unknown as Comment[]);
+      try {
+        const { data: c, error: cErr } = await supabase
+          .from('comments')
+          .select('id, content, created_at, author:author_id(full_name)')
+          .eq('task_id', taskId)
+          .order('created_at', { ascending: true });
+        if (cErr) {
+          console.warn('Comment join failed, falling back:', cErr.message);
+          const { data: cFallback } = await supabase.from('comments').select('*').eq('task_id', taskId).order('created_at', { ascending: true });
+          if (cFallback) setComments(cFallback.map(c => ({ ...c, author: null })) as unknown as Comment[]);
+        } else if (c) {
+          setComments(c as unknown as Comment[]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch comments:', err);
+      }
 
       const { data: a } = await supabase.from('file_attachments').select('id, file_name, file_url').eq('task_id', taskId);
       if (a) setAttachments(a);
@@ -74,12 +84,17 @@ export function TaskDetailPanel({ taskId, onClose }: Props) {
     if (!newComment.trim() || !user || !taskId) return;
     setPosting(true);
     await supabase.from('comments').insert({ task_id: taskId, author_id: user.id, content: newComment.trim() });
-    const { data: c } = await supabase
+    const { data: c, error: cErr } = await supabase
       .from('comments')
       .select('id, content, created_at, author:author_id(full_name)')
       .eq('task_id', taskId)
       .order('created_at', { ascending: true });
-    if (c) setComments(c as unknown as Comment[]);
+    if (cErr) {
+      const { data: cFallback } = await supabase.from('comments').select('*').eq('task_id', taskId).order('created_at', { ascending: true });
+      if (cFallback) setComments(cFallback.map(c => ({ ...c, author: null })) as unknown as Comment[]);
+    } else if (c) {
+      setComments(c as unknown as Comment[]);
+    }
     setNewComment('');
     setPosting(false);
   };

@@ -39,11 +39,16 @@ export default function Notifications() {
   const [loading, setLoading] = useState(true);
 
   const fetchNotifications = async () => {
-    const { data } = await supabase
-      .from('notifications')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (data) setNotifications(data);
+    try {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) console.error('Failed to fetch notifications:', error.message);
+      if (data) setNotifications(data);
+    } catch (err) {
+      console.error('Failed to fetch notifications:', err);
+    }
     setLoading(false);
   };
 

@@ -48,12 +48,17 @@ export default function CalendarPage() {
   const [saving, setSaving] = useState(false);
 
   const fetchData = async () => {
-    const [mRes, pRes] = await Promise.all([
-      supabase.from('meetings').select('*').order('date', { ascending: true }),
-      supabase.from('profiles').select('id, full_name'),
-    ]);
-    if (mRes.data) setMeetings(mRes.data);
-    if (pRes.data) setProfiles(pRes.data);
+    try {
+      const [mRes, pRes] = await Promise.all([
+        supabase.from('meetings').select('*').order('date', { ascending: true }),
+        supabase.from('profiles').select('id, full_name'),
+      ]);
+      if (mRes.error) console.error('Failed to fetch meetings:', mRes.error.message);
+      if (mRes.data) setMeetings(mRes.data);
+      if (pRes.data) setProfiles(pRes.data);
+    } catch (err) {
+      console.error('Failed to fetch calendar data:', err);
+    }
     setLoading(false);
   };
 
