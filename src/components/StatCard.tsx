@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';   //// StatCard component for dashboard metrics
 import { Card, CardContent } from '@/components/ui/card';
 
 interface StatCardProps {
