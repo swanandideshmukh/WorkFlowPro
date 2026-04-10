@@ -78,7 +78,8 @@ src/
 
 
 > Dashboard
-<img width="1363" height="674" alt="login_netlify" src="https://github.com/user-attachments/assets/94748b62-b6d4-4933-87d4-b959e4e63d93" />
+<img width="1362" height="681" alt="dashboard_netlify" src="https://github.com/user-attachments/assets/00d461d8-242f-480d-80d3-fd4e7ac8071c" />
+
 
 
 > Kanban Board
