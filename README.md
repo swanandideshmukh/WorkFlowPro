@@ -74,16 +74,18 @@ src/
 
 
 > Login page
-<img width="1334" height="685" alt="Screenshot 2026-03-25 163729" src="https://github.com/user-attachments/assets/4ceffe8b-c4f1-448d-a533-4ab64c9f0525" />
+<img width="1363" height="674" alt="login_netlify" src="https://github.com/user-attachments/assets/66629629-dc36-4df5-b88e-bfb6c51a8639" />
 
 
 > Dashboard
-<img width="1339" height="681" alt="Screenshot 2026-03-25 163826" src="https://github.com/user-attachments/assets/e8a189ca-ecfb-4b08-ba93-514092db0bfe" />
+<img width="1363" height="674" alt="login_netlify" src="https://github.com/user-attachments/assets/94748b62-b6d4-4933-87d4-b959e4e63d93" />
 
 
 > Kanban Board
-><img width="1335" height="670" alt="Screenshot 2026-03-25 163927" src="https://github.com/user-attachments/assets/37edf234-09e4-42d0-a0b6-6bf185f4d3c7" />
+><img width="1363" height="675" alt="kanabn_netlify" src="https://github.com/user-attachments/assets/df3ab5c9-57a7-4950-bb73-7a0296308798" />
 
-> 
+> Tasks
+> <img width="1365" height="678" alt="tasks_netlify" src="https://github.com/user-attachments/assets/3671ea2d-23c3-4417-902c-0416716d0cd3" />
+
 
 
