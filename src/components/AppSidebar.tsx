@@ -35,7 +35,9 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
 
-  const visibleLinks = allLinks.filter((l) => role && l.roles.includes(role));
+  // Default to 'employee' visibility when role hasn't loaded yet so links always show
+  const effectiveRole = role || 'employee';
+  const visibleLinks = allLinks.filter((l) => l.roles.includes(effectiveRole));
 
   return (
     <Sidebar collapsible="icon" className="border-r-0">
