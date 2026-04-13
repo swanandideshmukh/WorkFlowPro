@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState } from 'react';        /*React hook that lets the component remember values*/
+import { useNavigate, Link } from 'react-router-dom';   /*lets the code redirect the user to another page after login, without full page reloads.*/
+import { useAuth } from '@/contexts/AuthContext';     /*brings in the authentication functions from our custom AuthContext file.*/
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { Eye, EyeOff, CheckSquare } from 'lucide-react';
+import { Eye, EyeOff, CheckSquare } from 'lucide-react';   /*show/hide password button*/
 
 export default function Login() {
   const [email, setEmail] = useState('');
